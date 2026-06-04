@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galater – Dein Feedback</title>
+<style>
+  :root{
+    --grad: linear-gradient(135deg,#5BA7C9 0%,#3FB6A8 45%,#6C63FF 100%);
+    --blue:#2E7FB0; --teal:#3FB6A8; --violet:#6C63FF;
+    --ink:#1c2430; --muted:#6b7785; --line:#e6eaef; --bg:#f6f8fa;
+    --card:#ffffff; --ok:#2fae8f;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px; margin:0 auto; padding:0 18px 80px}
+  /* Header */
+  .hero{
+    background:var(--grad); color:#fff; border-radius:0 0 28px 28px;
+    padding:42px 26px 38px; margin-bottom:26px; text-align:center;
+    box-shadow:0 10px 30px rgba(76,99,160,.18);
+  }
+  .brand{font-size:13px; letter-spacing:3px; text-transform:uppercase; opacity:.92; font-weight:700}
+  .hero h1{margin:14px 0 6px; font-size:30px; letter-spacing:5px; font-weight:800}
+  .hero .sub{font-size:14px; letter-spacing:2px; text-transform:uppercase; opacity:.92}
+  .hero p{max-width:520px; margin:16px auto 0; font-size:15.5px; opacity:.97}
+  .meta{margin-top:16px; font-size:13px; opacity:.9}
+  .meta b{font-weight:700}
+  /* Sections */
+  .sec{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:22px 22px 8px; margin-bottom:18px; box-shadow:0 2px 10px rgba(20,40,80,.04);
+  }
+  .sec h2{
+    font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--blue);
+    margin:0 0 4px; font-weight:800;
+  }
+  .sec .secdesc{color:var(--muted); font-size:13.5px; margin:0 0 16px}
+  .q{margin:0 0 22px; padding-bottom:18px; border-bottom:1px dashed var(--line)}
+  .q:last-child{border-bottom:none}
+  .q .label{font-weight:650; font-size:15.5px; margin-bottom:10px; display:block}
+  .q .hint{color:var(--muted); font-size:13px; font-weight:400; display:block; margin-top:3px}
+  .req{color:var(--violet); font-weight:700}
+  /* Scale (Likert) */
+  .scale{display:flex; gap:8px; flex-wrap:wrap}
+  .scale label{flex:1; min-width:54px; cursor:pointer}
+  .scale input{position:absolute; opacity:0; width:0; height:0}
+  .scale .pill{
+    display:flex; align-items:center; justify-content:center; height:46px;
+    border:1.5px solid var(--line); border-radius:11px; font-weight:700; color:var(--muted);
+    transition:.15s; background:#fff;
+  }
+  .scale input:checked + .pill{
+    background:var(--grad); color:#fff; border-color:transparent;
+    box-shadow:0 4px 12px rgba(76,99,160,.25);
+  }
+  .scale input:focus-visible + .pill{outline:2px solid var(--violet); outline-offset:2px}
+  .ends{display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-top:6px}
+  /* Choice (radio list) */
+  .choices{display:flex; flex-direction:column; gap:9px}
+  .choices label{cursor:pointer; position:relative}
+  .choices input{position:absolute; opacity:0; width:0; height:0}
+  .choices .opt{
+    display:flex; align-items:center; gap:11px; padding:12px 14px;
+    border:1.5px solid var(--line); border-radius:11px; transition:.15s; background:#fff; font-size:15px;
+  }
+  .choices .opt::before{
+    content:""; width:18px; height:18px; border-radius:50%; border:2px solid #cdd5de; flex:none; transition:.15s;
+  }
+  .choices input:checked + .opt{border-color:var(--violet); background:#f4f3ff}
+  .choices input:checked + .opt::before{border-color:var(--violet); background:var(--violet); box-shadow:inset 0 0 0 3px #fff}
+  .choices input:focus-visible + .opt{outline:2px solid var(--violet); outline-offset:2px}
+  /* Text */
+  textarea,input[type=email],input[type=text]{
+    width:100%; border:1.5px solid var(--line); border-radius:11px; padding:12px 14px;
+    font:inherit; color:var(--ink); resize:vertical; background:#fff;
+  }
+  textarea:focus,input:focus{outline:none; border-color:var(--violet)}
+  textarea{min-height:84px}
+  /* Branch */
+  .branch{display:none}
+  .branch.show{display:block; animation:fade .25s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
+  .emailbox{display:none; margin-top:12px}
+  .emailbox.show{display:block}
+  /* Submit */
+  .submit{
+    width:100%; border:none; border-radius:14px; padding:16px; color:#fff; font-size:16px; font-weight:800;
+    letter-spacing:.5px; background:var(--grad); cursor:pointer; box-shadow:0 8px 22px rgba(76,99,160,.28);
+    transition:.15s;
+  }
+  .submit:hover{filter:brightness(1.04)}
+  .submit:disabled{opacity:.6; cursor:default}
+  .foot{text-align:center; color:var(--muted); font-size:12.5px; margin-top:14px}
+  /* Success */
+  .done{display:none; text-align:center; padding:60px 24px}
+  .done.show{display:block}
+  .done .ck{
+    width:74px; height:74px; border-radius:50%; background:var(--grad); margin:0 auto 18px;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(76,99,160,.3);
+  }
+  .done .ck svg{width:36px; height:36px}
+  .done h2{font-size:24px; margin:0 0 8px}
+  .done p{color:var(--muted); max-width:420px; margin:0 auto}
+  .err{display:none; background:#fff4f4; border:1px solid #f3c9c9; color:#a23; border-radius:11px; padding:12px 14px; margin-top:12px; font-size:14px}
+  .err.show{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="brand">crosspaint · 2minBibel</div>
+    <h1>GALATER</h1>
+    <div class="sub">Dein Feedback</div>
+    <p>Wir haben einen neuen Leitfaden &amp; ein Workbook entwickelt, um den Galaterbrief in Hauskreisen und Jugendgruppen einfach zu präsentieren. Bevor wir weitermachen, brauchen wir deine ehrliche Meinung.</p>
+    <div class="meta">⏱ <b>ca. 3 Minuten</b> &nbsp;·&nbsp; 🔒 anonym</div>
+  </div>
+
+  <form id="fb">
+
+    <!-- Routing -->
+    <div class="sec">
+      <h2>Zuerst kurz: Wer bist du?</h2>
+      <p class="secdesc">Damit wir dir die passenden Fragen stellen.</p>
+      <div class="q" style="border-bottom:none; padding-bottom:0; margin-bottom:6px">
+        <span class="label">Wie hast du das Material angeschaut? <span class="req">*</span></span>
+        <div class="choices" id="profil">
+          <label><input type="radio" name="profil" value="Leiter" required><span class="opt">Als (möglicher) Leiter / Präsentator</span></label>
+          <label><input type="radio" name="profil" value="Teilnehmer"><span class="opt">Als Teilnehmer</span></label>
+          <label><input type="radio" name="profil" value="Beides"><span class="opt">Beides</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Erster Eindruck (alle) -->
+    <div class="sec">
+      <h2>Erster Eindruck</h2>
+      <div class="q">
+        <span class="label">Wie ist dein Gesamteindruck vom Material? <span class="req">*</span></span>
+        <div class="scale" data-name="eindruck" data-required="1">
+          <label><input type="radio" name="eindruck" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="eindruck" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="eindruck" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="eindruck" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="eindruck" value="5"><span class="pill">5</span></label>
+        </div>
+        <div class="ends"><span>schwach</span><span>sehr stark</span></div>
+      </div>
+
+      <div class="q">
+        <span class="label">Ist klar, worum es geht?
+          <span class="hint">Ziel: die Hauptbotschaft des Galaterbriefs und die Lehre von Paulus verstehen.</span>
+        </span>
+        <div class="scale" data-name="ziel_klar">
+          <label><input type="radio" name="ziel_klar" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="ziel_klar" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="ziel_klar" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="ziel_klar" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="ziel_klar" value="5"><span class="pill">5</span></label>
+        </div>
+        <div class="ends"><span>gar nicht klar</span><span>sehr klar</span></div>
+      </div>
+
+      <div class="q">
+        <span class="label">Der Trichter-Aufbau hilft mir, den Brief einzuordnen.
+          <span class="hint">Bibel → Paulusbriefe → Galater → Anwendung.</span>
+        </span>
+        <div class="scale" data-name="trichter">
+          <label><input type="radio" name="trichter" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="trichter" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="trichter" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="trichter" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="trichter" value="5"><span class="pill">5</span></label>
+        </div>
+        <div class="ends"><span>stimme nicht zu</span><span>stimme voll zu</span></div>
+      </div>
+    </div>
+
+    <!-- Branch: Leiter -->
+    <div class="sec branch" id="branch-leiter">
+      <h2>Für dich als Leiter</h2>
+      <p class="secdesc">Zum Präsentations-Leitfaden.</p>
+      <div class="q">
+        <span class="label">Kannst du dir vorstellen, mit diesem Leitfaden eine Session zu leiten?</span>
+        <div class="choices">
+          <label><input type="radio" name="P_leiten" value="Ja, so wie er ist"><span class="opt">Ja, so wie er ist</span></label>
+          <label><input type="radio" name="P_leiten" value="Ja, mit kleinen Anpassungen"><span class="opt">Ja, mit kleinen Anpassungen</span></label>
+          <label><input type="radio" name="P_leiten" value="Nur mit größeren Änderungen"><span class="opt">Nur mit größeren Änderungen</span></label>
+          <label><input type="radio" name="P_leiten" value="Nein"><span class="opt">Nein</span></label>
+        </div>
+      </div>
+      <div class="q">
+        <span class="label">Die Hilfe-Kästen sind nützlich.
+          <span class="hint">Nugget, Anleitung, Antwortvorschlag, Ziel.</span>
+        </span>
+        <div class="scale" data-name="P_kaesten">
+          <label><input type="radio" name="P_kaesten" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="P_kaesten" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="P_kaesten" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="P_kaesten" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="P_kaesten" value="5"><span class="pill">5</span></label>
+        </div>
+        <div class="ends"><span>nicht nützlich</span><span>sehr nützlich</span></div>
+      </div>
+      <div class="q">
+        <span class="label">Wie viel Vorbereitung bräuchtest du, um damit zu leiten?</span>
+        <div class="choices">
+          <label><input type="radio" name="P_vorbereitung" value="Kaum"><span class="opt">Kaum – ich könnte fast direkt loslegen</span></label>
+          <label><input type="radio" name="P_vorbereitung" value="Etwas"><span class="opt">Etwas – einmal durchlesen reicht</span></label>
+          <label><input type="radio" name="P_vorbereitung" value="Viel"><span class="opt">Viel – das wäre für mich aufwändig</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Branch: Teilnehmer -->
+    <div class="sec branch" id="branch-teilnehmer">
+      <h2>Für dich als Teilnehmer</h2>
+      <p class="secdesc">Zum Workbook und zur Präsentation.</p>
+      <div class="q">
+        <span class="label">Nach so einer Präsentation könnte ich die Hauptbotschaft des Galaterbriefs in einem Satz wiedergeben.</span>
+        <div class="choices">
+          <label><input type="radio" name="T_kerngedanke" value="Ja"><span class="opt">Ja</span></label>
+          <label><input type="radio" name="T_kerngedanke" value="Teilweise"><span class="opt">Teilweise</span></label>
+          <label><input type="radio" name="T_kerngedanke" value="Nein"><span class="opt">Nein</span></label>
+        </div>
+      </div>
+      <div class="q">
+        <span class="label">Das Workbook macht Lust, aktiv mitzumachen.
+          <span class="hint">Schaubilder ausfüllen, Fragen beantworten.</span>
+        </span>
+        <div class="scale" data-name="T_workbook">
+          <label><input type="radio" name="T_workbook" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="T_workbook" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="T_workbook" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="T_workbook" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="T_workbook" value="5"><span class="pill">5</span></label>
+        </div>
+        <div class="ends"><span>überhaupt nicht</span><span>auf jeden Fall</span></div>
+      </div>
+      <div class="q">
+        <span class="label">Die Anwendung auf mein eigenes Leben war für mich …</span>
+        <div class="choices">
+          <label><input type="radio" name="T_anwendung" value="Sehr greifbar"><span class="opt">Sehr greifbar</span></label>
+          <label><input type="radio" name="T_anwendung" value="Etwas greifbar"><span class="opt">Etwas greifbar</span></label>
+          <label><input type="radio" name="T_anwendung" value="Wenig greifbar"><span class="opt">Wenig greifbar</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kernsignale (alle) -->
+    <div class="sec">
+      <h2>Das Wichtigste</h2>
+      <div class="q">
+        <span class="label">Beantwortet dieses Material ein echtes Bedürfnis für dich oder deine Gruppe? <span class="req">*</span></span>
+        <div class="scale" data-name="beduerfnis" data-required="1">
+          <label><input type="radio" name="beduerfnis" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="beduerfnis" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="beduerfnis" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="beduerfnis" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="beduerfnis" value="5"><span class="pill">5</span></label>
+        </div>
+        <div class="ends"><span>gar nicht</span><span>voll und ganz</span></div>
+      </div>
+      <div class="q">
+        <span class="label">Würdest du dieses Material einem anderen Leiter weiterempfehlen? <span class="req">*</span></span>
+        <div class="choices">
+          <label><input type="radio" name="empfehlung" value="Ja" required><span class="opt">Ja</span></label>
+          <label><input type="radio" name="empfehlung" value="Vielleicht"><span class="opt">Vielleicht</span></label>
+          <label><input type="radio" name="empfehlung" value="Nein"><span class="opt">Nein</span></label>
+        </div>
+      </div>
+      <div class="q">
+        <span class="label">Die Verbindung zu den 2minBibel-Videos ist klar und sinnvoll.</span>
+        <div class="scale" data-name="video_link">
+          <label><input type="radio" name="video_link" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="video_link" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="video_link" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="video_link" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="video_link" value="5"><span class="pill">5</span></label>
+          <label><input type="radio" name="video_link" value="nicht gesehen"><span class="pill" style="font-size:11px">n/a</span></label>
+        </div>
+        <div class="ends"><span>nicht klar</span><span>sehr sinnvoll &nbsp;·&nbsp; n/a = noch nicht gesehen</span></div>
+      </div>
+    </div>
+
+    <!-- Offen -->
+    <div class="sec">
+      <h2>In deinen Worten</h2>
+      <div class="q">
+        <span class="label">Wenn du <b>eine einzige Sache</b> verbessern könntest – welche?</span>
+        <textarea name="verbessern" placeholder="Schreib frei …"></textarea>
+      </div>
+      <div class="q">
+        <span class="label">Was sollten wir auf jeden Fall <b>behalten</b>?</span>
+        <textarea name="behalten" placeholder="Was hat dich überzeugt?"></textarea>
+      </div>
+    </div>
+
+    <!-- Tester-Recruitment -->
+    <div class="sec">
+      <h2>Würdest du es testen?</h2>
+      <p class="secdesc">Der wertvollste Schritt: das Material wirklich mit einer Gruppe ausprobieren.</p>
+      <div class="q" style="border-bottom:none; padding-bottom:0">
+        <span class="label">Wärst du bereit, eine echte Session mit deiner Gruppe zu leiten und uns danach ein kurzes, ausführlicheres Feedback zu geben?</span>
+        <div class="choices">
+          <label><input type="radio" name="tester_bereit" value="Ja"><span class="opt">Ja, gerne</span></label>
+          <label><input type="radio" name="tester_bereit" value="Vielleicht"><span class="opt">Vielleicht</span></label>
+          <label><input type="radio" name="tester_bereit" value="Nein"><span class="opt">Nein, dieses Mal nicht</span></label>
+        </div>
+        <div class="emailbox" id="emailbox">
+          <span class="label" style="margin-top:14px">Deine E-Mail <span class="hint">Nur dafür: wir schicken dir das Material und das kurze Tester-Formular. Sonst alles anonym.</span></span>
+          <input type="email" name="email" placeholder="name@beispiel.de">
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="q" style="border-bottom:none; padding-bottom:0">
+        <span class="label">Noch etwas, das du loswerden möchtest? <span class="hint">Optional.</span></span>
+        <textarea name="sonstiges" placeholder="Frei für alles Weitere …"></textarea>
+      </div>
+    </div>
+
+    <button type="submit" class="submit" id="send">Feedback absenden</button>
+    <div class="err" id="err"></div>
+    <div class="foot">Danke, dass du dir die Zeit nimmst. 🙏 — Das crosspaint-Team</div>
+  </form>
+
+  <!-- Success -->
+  <div class="done" id="done">
+    <div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <h2>Vielen Dank!</h2>
+    <p>Dein Feedback ist angekommen und hilft uns enorm. Wenn du dich als Tester gemeldet hast, hörst du bald von uns.</p>
+  </div>
+
+</div>
+
+<script>
+  // ====== HIER DEINE WEB-APP-URL EINFÜGEN (siehe Anleitung) ======
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJTOjNmghY-WBRkZYXl1_ibH7F0plgbKnpJtjxNtOkMo-DdPy3FI9AfqS08WAB4yev/exec";
+  // ===============================================================
+
+  const FIELDS = ["profil","eindruck","ziel_klar","trichter",
+    "P_leiten","P_kaesten","P_vorbereitung",
+    "T_kerngedanke","T_workbook","T_anwendung",
+    "beduerfnis","empfehlung","video_link",
+    "verbessern","behalten","tester_bereit","email","sonstiges"];
+
+  const form = document.getElementById('fb');
+  const errBox = document.getElementById('err');
+
+  // Branching by profile
+  const leiter = document.getElementById('branch-leiter');
+  const teiln  = document.getElementById('branch-teilnehmer');
+  document.querySelectorAll('input[name="profil"]').forEach(r=>{
+    r.addEventListener('change', e=>{
+      const v = e.target.value;
+      leiter.classList.toggle('show', v==='Leiter' || v==='Beides');
+      teiln.classList.toggle('show',  v==='Teilnehmer' || v==='Beides');
+    });
+  });
+
+  // Show email field when willing to test
+  const emailbox = document.getElementById('emailbox');
+  document.querySelectorAll('input[name="tester_bereit"]').forEach(r=>{
+    r.addEventListener('change', e=>{
+      emailbox.classList.toggle('show', e.target.value==='Ja' || e.target.value==='Vielleicht');
+    });
+  });
+
+  function collect(){
+    const d = {formType:"Niveau 1"};
+    FIELDS.forEach(f=>{
+      const el = form.querySelector(`[name="${f}"]:checked`) || form.querySelector(`[name="${f}"]`);
+      let val = "";
+      if(el){
+        if(el.type==='radio'){ const c=form.querySelector(`[name="${f}"]:checked`); val=c?c.value:""; }
+        else { val = el.value.trim(); }
+      }
+      d[f]=val;
+    });
+    return d;
+  }
+
+  function validate(d){
+    if(!d.profil) return "Bitte sag uns kurz, wer du bist.";
+    if(!d.eindruck) return "Bitte gib deinen Gesamteindruck an.";
+    if(!d.beduerfnis) return "Bitte beantworte die Frage zum Bedürfnis.";
+    if(!d.empfehlung) return "Bitte beantworte die Empfehlungs-Frage.";
+    if((d.tester_bereit==='Ja') && d.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email))
+      return "Die E-Mail-Adresse sieht nicht ganz richtig aus.";
+    return null;
+  }
+
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    errBox.classList.remove('show');
+    const data = collect();
+    const v = validate(data);
+    if(v){ errBox.textContent = v; errBox.classList.add('show'); window.scrollTo({top:0,behavior:'smooth'}); return; }
+
+    const btn = document.getElementById('send');
+    btn.disabled = true; btn.textContent = "Wird gesendet …";
+
+    try{
+      if(SCRIPT_URL && !SCRIPT_URL.startsWith("HIER_")){
+        await fetch(SCRIPT_URL, {
+          method:"POST", mode:"no-cors",
+          headers:{"Content-Type":"text/plain;charset=utf-8"},
+          body: JSON.stringify(data)
+        });
+      }
+      form.style.display='none';
+      document.getElementById('done').classList.add('show');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }catch(err){
+      btn.disabled=false; btn.textContent="Feedback absenden";
+      errBox.textContent="Senden fehlgeschlagen. Bitte prüfe deine Internetverbindung und versuch es nochmal.";
+      errBox.classList.add('show');
+    }
+  });
+</script>
+</body>
+</html>

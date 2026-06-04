@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galater – Tester-Feedback</title>
+<style>
+  :root{
+    --grad: linear-gradient(135deg,#5BA7C9 0%,#3FB6A8 45%,#6C63FF 100%);
+    --blue:#2E7FB0; --teal:#3FB6A8; --violet:#6C63FF;
+    --ink:#1c2430; --muted:#6b7785; --line:#e6eaef; --bg:#f6f8fa; --card:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:680px; margin:0 auto; padding:0 18px 80px}
+  .hero{background:var(--grad); color:#fff; border-radius:0 0 28px 28px; padding:42px 26px 38px;
+    margin-bottom:26px; text-align:center; box-shadow:0 10px 30px rgba(76,99,160,.18);}
+  .brand{font-size:13px; letter-spacing:3px; text-transform:uppercase; opacity:.92; font-weight:700}
+  .hero h1{margin:14px 0 6px; font-size:30px; letter-spacing:5px; font-weight:800}
+  .hero .sub{font-size:14px; letter-spacing:2px; text-transform:uppercase; opacity:.92}
+  .hero p{max-width:520px; margin:16px auto 0; font-size:15.5px; opacity:.97}
+  .meta{margin-top:16px; font-size:13px; opacity:.9}
+  .meta b{font-weight:700}
+  .sec{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 22px 8px;
+    margin-bottom:18px; box-shadow:0 2px 10px rgba(20,40,80,.04);}
+  .sec h2{font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--blue); margin:0 0 4px; font-weight:800}
+  .sec .secdesc{color:var(--muted); font-size:13.5px; margin:0 0 16px}
+  .q{margin:0 0 22px; padding-bottom:18px; border-bottom:1px dashed var(--line)}
+  .q:last-child{border-bottom:none}
+  .q .label{font-weight:650; font-size:15.5px; margin-bottom:10px; display:block}
+  .q .hint{color:var(--muted); font-size:13px; font-weight:400; display:block; margin-top:3px}
+  .req{color:var(--violet); font-weight:700}
+  .scale{display:flex; gap:8px; flex-wrap:wrap}
+  .scale label{flex:1; min-width:54px; cursor:pointer}
+  .scale input{position:absolute; opacity:0; width:0; height:0}
+  .scale .pill{display:flex; align-items:center; justify-content:center; height:46px; border:1.5px solid var(--line);
+    border-radius:11px; font-weight:700; color:var(--muted); transition:.15s; background:#fff;}
+  .scale input:checked + .pill{background:var(--grad); color:#fff; border-color:transparent; box-shadow:0 4px 12px rgba(76,99,160,.25)}
+  .scale input:focus-visible + .pill{outline:2px solid var(--violet); outline-offset:2px}
+  .ends{display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-top:6px}
+  .choices{display:flex; flex-direction:column; gap:9px}
+  .choices label{cursor:pointer; position:relative}
+  .choices input{position:absolute; opacity:0; width:0; height:0}
+  .choices .opt{display:flex; align-items:center; gap:11px; padding:12px 14px; border:1.5px solid var(--line);
+    border-radius:11px; transition:.15s; background:#fff; font-size:15px;}
+  .choices .opt::before{content:""; width:18px; height:18px; border-radius:50%; border:2px solid #cdd5de; flex:none; transition:.15s}
+  .choices input:checked + .opt{border-color:var(--violet); background:#f4f3ff}
+  .choices input:checked + .opt::before{border-color:var(--violet); background:var(--violet); box-shadow:inset 0 0 0 3px #fff}
+  .choices input:focus-visible + .opt{outline:2px solid var(--violet); outline-offset:2px}
+  textarea,input[type=email],input[type=text],input[type=number]{width:100%; border:1.5px solid var(--line);
+    border-radius:11px; padding:12px 14px; font:inherit; color:var(--ink); resize:vertical; background:#fff;}
+  textarea:focus,input:focus{outline:none; border-color:var(--violet)}
+  textarea{min-height:84px}
+  .submit{width:100%; border:none; border-radius:14px; padding:16px; color:#fff; font-size:16px; font-weight:800;
+    letter-spacing:.5px; background:var(--grad); cursor:pointer; box-shadow:0 8px 22px rgba(76,99,160,.28); transition:.15s}
+  .submit:hover{filter:brightness(1.04)}
+  .submit:disabled{opacity:.6; cursor:default}
+  .foot{text-align:center; color:var(--muted); font-size:12.5px; margin-top:14px}
+  .done{display:none; text-align:center; padding:60px 24px}
+  .done.show{display:block}
+  .done .ck{width:74px; height:74px; border-radius:50%; background:var(--grad); margin:0 auto 18px;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(76,99,160,.3)}
+  .done .ck svg{width:36px; height:36px}
+  .done h2{font-size:24px; margin:0 0 8px}
+  .done p{color:var(--muted); max-width:420px; margin:0 auto}
+  .err{display:none; background:#fff4f4; border:1px solid #f3c9c9; color:#a23; border-radius:11px;
+    padding:12px 14px; margin-top:12px; font-size:14px}
+  .err.show{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="brand">crosspaint · 2minBibel</div>
+    <h1>GALATER</h1>
+    <div class="sub">Tester-Feedback</div>
+    <p>Du hast eine echte Session mit deiner Gruppe geleitet – danke! Dein Bericht aus der Praxis ist für uns am wertvollsten. Bitte fülle dies <b>direkt nach der Session</b> aus.</p>
+    <div class="meta">⏱ <b>ca. 6 Minuten</b> &nbsp;·&nbsp; aus der Praxis</div>
+  </div>
+
+  <form id="fb">
+
+    <!-- Kontext -->
+    <div class="sec">
+      <h2>Der Rahmen</h2>
+      <div class="q">
+        <span class="label">Mit welcher Gruppe hast du es durchgeführt? <span class="req">*</span></span>
+        <div class="choices">
+          <label><input type="radio" name="gruppentyp" value="Hauskreis"><span class="opt">Hauskreis</span></label>
+          <label><input type="radio" name="gruppentyp" value="Jugendgruppe"><span class="opt">Jugendgruppe</span></label>
+          <label><input type="radio" name="gruppentyp" value="Bibelkreis"><span class="opt">Bibelkreis</span></label>
+          <label><input type="radio" name="gruppentyp" value="Andere"><span class="opt">Andere</span></label>
+        </div>
+      </div>
+      <div class="q">
+        <span class="label">Wie viele Teilnehmer waren dabei?</span>
+        <input type="number" name="anzahl" min="1" placeholder="z. B. 8">
+      </div>
+      <div class="q">
+        <span class="label">Was hast du benutzt?</span>
+        <div class="choices">
+          <label><input type="radio" name="material_genutzt" value="Nur Leitfaden"><span class="opt">Nur den Leitfaden</span></label>
+          <label><input type="radio" name="material_genutzt" value="Nur Workbook"><span class="opt">Nur das Workbook</span></label>
+          <label><input type="radio" name="material_genutzt" value="Beides"><span class="opt">Beides</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vorbereitung -->
+    <div class="sec">
+      <h2>Vorbereitung</h2>
+      <div class="q">
+        <span class="label">Wie lange hast du gebraucht, um dich vorzubereiten?</span>
+        <div class="choices">
+          <label><input type="radio" name="vorbereitungszeit" value="< 30 Min"><span class="opt">Weniger als 30 Minuten</span></label>
+          <label><input type="radio" name="vorbereitungszeit" value="30–60 Min"><span class="opt">30 – 60 Minuten</span></label>
+          <label><input type="radio" name="vorbereitungszeit" value="1–2 Std"><span class="opt">1 – 2 Stunden</span></label>
+          <label><input type="radio" name="vorbereitungszeit" value="> 2 Std"><span class="opt">Mehr als 2 Stunden</span></label>
+        </div>
+      </div>
+      <div class="q">
+        <span class="label">Der Leitfaden war leicht vorzubereiten.</span>
+        <div class="scale" data-name="vorbereitung_leicht">
+          <label><input type="radio" name="vorbereitung_leicht" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="vorbereitung_leicht" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="vorbereitung_leicht" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="vorbereitung_leicht" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="vorbereitung_leicht" value="5"><span class="pill">5</span></label>
+        </div>
+        <div class="ends"><span>sehr aufwändig</span><span>sehr leicht</span></div>
+      </div>
+    </div>
+
+    <!-- Durchführung -->
+    <div class="sec">
+      <h2>Während der Session</h2>
+      <div class="q">
+        <span class="label">Was hat in der Gruppe <b>am besten funktioniert</b>? <span class="req">*</span></span>
+        <textarea name="gut_funktioniert" placeholder="Welcher Moment, welche Übung, welche Frage hat gezündet?"></textarea>
+      </div>
+      <div class="q">
+        <span class="label">Wo hat die Gruppe <b>abgeschaltet oder gehakt</b>? <span class="req">*</span></span>
+        <textarea name="gehakt" placeholder="Wo wurde es zäh, unklar oder zu lang?"></textarea>
+      </div>
+      <div class="q">
+        <span class="label">Die vorgeschlagene Dauer hat gepasst.
+          <span class="hint">Insgesamt ca. 50–60 Minuten.</span>
+        </span>
+        <div class="choices">
+          <label><input type="radio" name="dauer" value="Zu kurz"><span class="opt">Zu kurz</span></label>
+          <label><input type="radio" name="dauer" value="Genau richtig"><span class="opt">Genau richtig</span></label>
+          <label><input type="radio" name="dauer" value="Zu lang"><span class="opt">Zu lang</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wirkung -->
+    <div class="sec">
+      <h2>Was hängengeblieben ist</h2>
+      <div class="q">
+        <span class="label">Konnten die Teilnehmer am Ende den Kerngedanken wiedergeben? <span class="req">*</span>
+          <span class="hint">„Nur der Glaube an Jesus Christus – nicht die eigene Anstrengung."</span>
+        </span>
+        <div class="choices">
+          <label><input type="radio" name="kerngedanke_wiedergeben" value="Ja, die meisten"><span class="opt">Ja, die meisten</span></label>
+          <label><input type="radio" name="kerngedanke_wiedergeben" value="Teilweise"><span class="opt">Teilweise</span></label>
+          <label><input type="radio" name="kerngedanke_wiedergeben" value="Nein"><span class="opt">Nein</span></label>
+        </div>
+      </div>
+      <div class="q">
+        <span class="label">Die Anwendung (Teil IV) hat zu echtem Austausch geführt.</span>
+        <div class="scale" data-name="anwendung_austausch">
+          <label><input type="radio" name="anwendung_austausch" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="anwendung_austausch" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="anwendung_austausch" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="anwendung_austausch" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="anwendung_austausch" value="5"><span class="pill">5</span></label>
+        </div>
+        <div class="ends"><span>kaum</span><span>sehr</span></div>
+      </div>
+      <div class="q">
+        <span class="label">Habt ihr das 2minBibel-Video geschaut?</span>
+        <div class="choices">
+          <label><input type="radio" name="video_geschaut" value="Ja, war hilfreich"><span class="opt">Ja – und es war hilfreich</span></label>
+          <label><input type="radio" name="video_geschaut" value="Ja, eher nicht hilfreich"><span class="opt">Ja – aber eher nicht hilfreich</span></label>
+          <label><input type="radio" name="video_geschaut" value="Nein"><span class="opt">Nein, nicht geschaut</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anpassungen -->
+    <div class="sec">
+      <h2>Deine Anpassungen</h2>
+      <div class="q">
+        <span class="label">Was hast du <b>weggelassen, ergänzt oder improvisiert</b>?</span>
+        <textarea name="weggelassen_ergaenzt" placeholder="Wo bist du vom Material abgewichen – und warum?"></textarea>
+      </div>
+      <div class="q">
+        <span class="label">Was hat dir <b>konkret gefehlt</b>?</span>
+        <textarea name="gefehlt" placeholder="Was hättest du gern im Material gehabt?"></textarea>
+      </div>
+    </div>
+
+    <!-- Gesamt -->
+    <div class="sec">
+      <h2>Dein Fazit</h2>
+      <div class="q">
+        <span class="label">Gesamtnote für die Session-Erfahrung <span class="req">*</span></span>
+        <div class="scale" data-name="gesamtnote" data-required="1">
+          <label><input type="radio" name="gesamtnote" value="1"><span class="pill">1</span></label>
+          <label><input type="radio" name="gesamtnote" value="2"><span class="pill">2</span></label>
+          <label><input type="radio" name="gesamtnote" value="3"><span class="pill">3</span></label>
+          <label><input type="radio" name="gesamtnote" value="4"><span class="pill">4</span></label>
+          <label><input type="radio" name="gesamtnote" value="5"><span class="pill">5</span></label>
+        </div>
+        <div class="ends"><span>schwach</span><span>hervorragend</span></div>
+      </div>
+      <div class="q">
+        <span class="label">Würdest du es wieder benutzen und weiterempfehlen? <span class="req">*</span></span>
+        <div class="choices">
+          <label><input type="radio" name="wieder_nutzen" value="Ja"><span class="opt">Ja</span></label>
+          <label><input type="radio" name="wieder_nutzen" value="Vielleicht"><span class="opt">Vielleicht</span></label>
+          <label><input type="radio" name="wieder_nutzen" value="Nein"><span class="opt">Nein</span></label>
+        </div>
+      </div>
+      <div class="q">
+        <span class="label">Ein Zitat oder Moment aus der Session, der dir im Kopf geblieben ist:</span>
+        <textarea name="zitat" placeholder="Eine Reaktion, ein Aha-Moment, ein Satz eines Teilnehmers …"></textarea>
+      </div>
+      <div class="q" style="border-bottom:none; padding-bottom:0">
+        <span class="label">Name oder E-Mail <span class="hint">Optional – falls wir für Rückfragen kurz auf dich zukommen dürfen.</span></span>
+        <input type="text" name="name_email" placeholder="Name und/oder E-Mail">
+      </div>
+    </div>
+
+    <button type="submit" class="submit" id="send">Tester-Feedback absenden</button>
+    <div class="err" id="err"></div>
+    <div class="foot">Riesigen Dank für deinen Einsatz in der Praxis. 🙏 — Das crosspaint-Team</div>
+  </form>
+
+  <div class="done" id="done">
+    <div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <h2>Vielen Dank!</h2>
+    <p>Dein Praxis-Bericht ist angekommen. Genau solche Rückmeldungen entscheiden, wie es mit dem Galater-Material weitergeht.</p>
+  </div>
+
+</div>
+
+<script>
+  // ====== HIER DEINE WEB-APP-URL EINFÜGEN (dieselbe wie bei Niveau 1) ======
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJTOjNmghY-WBRkZYXl1_ibH7F0plgbKnpJtjxNtOkMo-DdPy3FI9AfqS08WAB4yev/exec";
+  // ========================================================================
+
+  const FIELDS = ["gruppentyp","anzahl","material_genutzt",
+    "vorbereitungszeit","vorbereitung_leicht",
+    "gut_funktioniert","gehakt","dauer",
+    "kerngedanke_wiedergeben","anwendung_austausch","video_geschaut",
+    "weggelassen_ergaenzt","gefehlt",
+    "gesamtnote","wieder_nutzen","zitat","name_email"];
+
+  const form = document.getElementById('fb');
+  const errBox = document.getElementById('err');
+
+  function collect(){
+    const d = {formType:"Niveau 2"};
+    FIELDS.forEach(f=>{
+      const checked = form.querySelector(`[name="${f}"]:checked`);
+      const any = form.querySelector(`[name="${f}"]`);
+      let val = "";
+      if(checked) val = checked.value;
+      else if(any && any.type!=='radio') val = any.value.trim();
+      d[f]=val;
+    });
+    return d;
+  }
+
+  function validate(d){
+    if(!d.gruppentyp) return "Bitte wähle die Art deiner Gruppe.";
+    if(!d.gut_funktioniert) return "Bitte beschreibe, was am besten funktioniert hat.";
+    if(!d.gehakt) return "Bitte beschreibe, wo es gehakt hat.";
+    if(!d.kerngedanke_wiedergeben) return "Bitte beantworte die Frage zum Kerngedanken.";
+    if(!d.gesamtnote) return "Bitte gib eine Gesamtnote.";
+    if(!d.wieder_nutzen) return "Bitte sag uns, ob du es wieder nutzen würdest.";
+    return null;
+  }
+
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    errBox.classList.remove('show');
+    const data = collect();
+    const v = validate(data);
+    if(v){ errBox.textContent=v; errBox.classList.add('show'); window.scrollTo({top:0,behavior:'smooth'}); return; }
+
+    const btn = document.getElementById('send');
+    btn.disabled=true; btn.textContent="Wird gesendet …";
+    try{
+      if(SCRIPT_URL && !SCRIPT_URL.startsWith("HIER_")){
+        await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",
+          headers:{"Content-Type":"text/plain;charset=utf-8"},
+          body:JSON.stringify(data)});
+      }
+      form.style.display='none';
+      document.getElementById('done').classList.add('show');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }catch(err){
+      btn.disabled=false; btn.textContent="Tester-Feedback absenden";
+      errBox.textContent="Senden fehlgeschlagen. Bitte prüfe deine Verbindung und versuch es nochmal.";
+      errBox.classList.add('show');
+    }
+  });
+</script>
+</body>
+</html>
