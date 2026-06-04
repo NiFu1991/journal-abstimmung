@@ -274,6 +274,10 @@
       else if(any && any.type!=='radio') val = any.value.trim();
       d[f]=val;
     });
+    // E-Mail aus dem Einladungslink (?email=...) übernehmen, um die Antwort
+    // der richtigen Person zuzuordnen (für die Erinnerungs-Automation).
+    const params = new URLSearchParams(location.search);
+    d.tester_email = (params.get("email") || "").trim();
     return d;
   }
 
