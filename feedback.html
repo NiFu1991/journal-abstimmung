@@ -108,6 +108,14 @@
   .done p{color:var(--muted); max-width:420px; margin:0 auto}
   .err{display:none; background:#fff4f4; border:1px solid #f3c9c9; color:#a23; border-radius:11px; padding:12px 14px; margin-top:12px; font-size:14px}
   .err.show{display:block}
+  /* Rabatt-Code */
+  .gift{margin:28px auto 0; max-width:440px}
+  .gift-label{font-size:15px; color:var(--ink); margin-bottom:12px}
+  .code-box{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap}
+  .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:800; letter-spacing:.5px;
+    background:#f4f3ff; border:1.5px dashed var(--violet); color:var(--violet); padding:12px 16px; border-radius:11px; font-size:16px}
+  .copybtn{border:none; background:var(--grad); color:#fff; font-weight:700; padding:11px 16px; border-radius:11px; cursor:pointer; font-size:14px}
+  .copybtn:hover{filter:brightness(1.05)}
 </style>
 </head>
 <body>
@@ -304,7 +312,7 @@
     <!-- Tester-Recruitment -->
     <div class="sec">
       <h2>Würdest du es testen?</h2>
-      <p class="secdesc">Der wertvollste Schritt: das Material wirklich mit einer Gruppe ausprobieren.</p>
+      <p class="secdesc">Der wertvollste Schritt: das Material wirklich mit einer Gruppe ausprobieren. 🎁 Als Dankeschön schenken wir dir dafür einen <b>20&nbsp;%-Gutschein</b> für unseren Shop.</p>
       <div class="q" style="border-bottom:none; padding-bottom:0">
         <span class="label">Wärst du bereit, eine echte Session mit deiner Gruppe zu leiten und uns danach ein kurzes, ausführlicheres Feedback zu geben?</span>
         <div class="choices">
@@ -336,6 +344,13 @@
     <div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
     <h2>Vielen Dank!</h2>
     <p>Dein Feedback ist angekommen und hilft uns enorm. Wenn du dich als Tester gemeldet hast, hörst du bald von uns.</p>
+    <div class="gift">
+      <div class="gift-label">🎁 Als Dankeschön: <b>10&nbsp;% Rabatt</b> in unserem Shop mit diesem Code:</div>
+      <div class="code-box">
+        <span class="code" id="rabattcode">DANKE_FÜR_DEIN_FEEDBACK</span>
+        <button type="button" class="copybtn" onclick="copyCode('rabattcode', this)">Kopieren</button>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -353,6 +368,16 @@
 
   const form = document.getElementById('fb');
   const errBox = document.getElementById('err');
+
+  // Rabattcode in die Zwischenablage kopieren
+  function copyCode(id, btn){
+    var text = document.getElementById(id).textContent.trim();
+    function ok(){ var o = btn.textContent; btn.textContent = "Kopiert ✓"; setTimeout(function(){ btn.textContent = o; }, 1800); }
+    function fallback(t){ var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(ok, function(){ fallback(text); ok(); });
+    } else { fallback(text); ok(); }
+  }
 
   // Branching by profile
   const leiter = document.getElementById('branch-leiter');
