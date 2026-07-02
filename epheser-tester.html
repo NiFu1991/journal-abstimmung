@@ -34,7 +34,7 @@
   .scale input{position:absolute;opacity:0;pointer-events:none}
   .scale label.checked{border-color:var(--orange);background:var(--orange);color:#fff}
   .scale-legend{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
-  textarea,input[type=email],input[type=text],input[type=number]{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;background:#fff;margin-top:6px}
+  textarea,input[type=email],input[type=text],input[type=number],select{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;background:#fff;margin-top:6px}
   textarea{min-height:74px;resize:vertical}
   .row{display:flex;gap:10px}
   .row .col{flex:1}
@@ -207,6 +207,16 @@
         </label>
       </div>
 
+      <!-- ==== BESTÄTIGUNG ==== -->
+      <div class="card">
+        <h2>Kurz bestätigen</h2>
+        <p class="hint">Bitte fülle dieses Formular erst <strong>nach</strong> deiner Session aus.</p>
+        <label class="check" id="chkDone">
+          <input type="checkbox" name="session_done">
+          <span>Ich habe die Session mit meiner Gruppe bereits durchgeführt. <span class="req">*</span></span>
+        </label>
+      </div>
+
       <!-- ==== GIFT / ADDRESS ==== -->
       <div class="card gift">
         <h2>🎁 Wohin dürfen wir dein Geschenk schicken?</h2>
@@ -226,13 +236,17 @@
           </div>
         </div>
         <div class="q">Land</div>
-        <input type="text" name="ship_country" value="Deutschland" autocomplete="country-name">
+        <select name="ship_country">
+          <option value="DE" selected>Deutschland</option>
+          <option value="AT">Österreich</option>
+          <option value="CH">Schweiz</option>
+        </select>
         <div class="q">E-Mail für die Versandbestätigung <span class="req">*</span></div>
         <input type="email" name="email" placeholder="name@beispiel.de" autocomplete="email">
       </div>
 
       <button type="submit" class="btn" id="submitBtn">Tester-Feedback absenden</button>
-      <div class="err" id="err">Bitte fülle die mit * markierten Pflichtfelder aus (inkl. Versandadresse fürs Geschenk).</div>
+      <div class="err" id="err">Bitte fülle die mit * markierten Pflichtfelder aus, bestätige die durchgeführte Session, und gib deine Versandadresse an.</div>
       <p class="foot">Riesigen Dank für deinen Einsatz in der Praxis. 🙏 — Das crosspaint-Team</p>
     </form>
   </div>
@@ -308,6 +322,7 @@
     const reqText=['best_funktioniert','gehakt','ship_name','ship_street','ship_zip','ship_city','email'];
     for(const r of reqRadio){ if(!getVal(r)){return fail();} }
     for(const t of reqText){ if(!txt(t)){return fail();} }
+    if(!form.querySelector('[name="session_done"]').checked){ return fail(); }
     err.style.display='none';
 
     const data={
