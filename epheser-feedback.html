@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epheser – Dein Feedback</title>
+<style>
+  :root{
+    --orange:#F4600A;      /* crosspaint CTA */
+    --orange-dark:#d8520a;
+    --ink:#1b1b1b;
+    --muted:#6b6b6b;
+    --line:#e7e3dd;
+    --bg:#faf7f2;
+    --card:#ffffff;
+    --ok:#1f8a4c;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:28px 20px 80px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-size:40px;line-height:1.05;margin:.25em 0 .05em;letter-spacing:-.01em}
+  .sub{font-size:19px;font-weight:600;color:var(--orange);margin:0 0 14px}
+  .lead{font-size:16px;color:#333;margin:0 0 10px}
+  .meta{font-size:13px;color:var(--muted);margin:2px 0 22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin:16px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  .card h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin:0 0 4px}
+  .card .hint{font-size:13px;color:var(--muted);margin:0 0 14px}
+  .q{margin:18px 0 6px;font-weight:600;font-size:15.5px}
+  .q .req{color:var(--orange)}
+  .qhint{font-size:13px;color:var(--muted);margin:-2px 0 10px;font-weight:400}
+  .opts{display:flex;flex-direction:column;gap:8px;margin:8px 0 4px}
+  .opt{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:11px 13px;cursor:pointer;transition:.12s;background:#fff}
+  .opt:hover{border-color:#c9c2b8}
+  .opt input{accent-color:var(--orange);width:17px;height:17px;flex:0 0 auto}
+  .opt.checked{border-color:var(--orange);background:#fff7f1}
+  .scale{display:flex;gap:6px;margin:8px 0 2px;flex-wrap:wrap}
+  .scale label{flex:1;min-width:52px;text-align:center;border:1px solid var(--line);border-radius:10px;padding:12px 0;cursor:pointer;font-weight:600;background:#fff;transition:.12s}
+  .scale label:hover{border-color:#c9c2b8}
+  .scale input{position:absolute;opacity:0;pointer-events:none}
+  .scale label.checked{border-color:var(--orange);background:var(--orange);color:#fff}
+  .scale-legend{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+  textarea,input[type=email],input[type=text]{
+    width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;background:#fff;margin-top:6px
+  }
+  textarea{min-height:74px;resize:vertical}
+  .gift{background:linear-gradient(180deg,#fff7f1,#ffffff);border:1.5px solid var(--orange)}
+  .gift h2{color:var(--orange-dark)}
+  .gift strong{color:var(--orange-dark)}
+  .btn{display:block;width:100%;border:0;background:var(--orange);color:#fff;font-size:17px;font-weight:700;
+    padding:16px;border-radius:12px;cursor:pointer;margin-top:22px;transition:.12s}
+  .btn:hover{background:var(--orange-dark)}
+  .btn:disabled{opacity:.6;cursor:default}
+  .foot{font-size:13px;color:var(--muted);text-align:center;margin-top:16px}
+  .thanks{display:none;text-align:center;padding:30px 10px}
+  .thanks h2{font-size:26px;color:var(--orange);margin:.2em 0}
+  .err{color:#b00;font-size:13px;margin-top:8px;display:none}
+  @media(max-width:480px){h1{font-size:32px}.scale label{min-width:44px;padding:10px 0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ==== FORM ==== -->
+  <div id="formView">
+    <div class="kicker">crosspaint · 2minBibel</div>
+    <h1>EPHESER</h1>
+    <div class="sub">Dein Feedback</div>
+    <p class="lead">Wir haben einen neuen <strong>Leitfaden &amp; ein Workbook</strong> entwickelt, um den Epheserbrief in Hauskreisen und Jugendgruppen einfach zu präsentieren. Bevor wir weitermachen, brauchen wir deine ehrliche Meinung.</p>
+    <p class="meta">⏱ ca. 3 Minuten · 🔒 anonym</p>
+
+    <form id="fb">
+
+      <div class="card">
+        <h2>Zuerst kurz: Wer bist du?</h2>
+        <p class="hint">Damit wir dir die passenden Fragen stellen.</p>
+        <div class="q">Wie hast du das Material angeschaut? <span class="req">*</span></div>
+        <div class="opts" data-radio="rolle" data-required="1">
+          <label class="opt"><input type="radio" name="rolle" value="Leiter"> Als (möglicher) Leiter / Präsentator</label>
+          <label class="opt"><input type="radio" name="rolle" value="Teilnehmer"> Als Teilnehmer</label>
+          <label class="opt"><input type="radio" name="rolle" value="Beides"> Beides</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Erster Eindruck</h2>
+        <div class="q">Wie ist dein Gesamteindruck vom Material? <span class="req">*</span></div>
+        <div class="scale" data-scale="gesamteindruck" data-required="1">
+          <label><input type="radio" name="gesamteindruck" value="1">1</label>
+          <label><input type="radio" name="gesamteindruck" value="2">2</label>
+          <label><input type="radio" name="gesamteindruck" value="3">3</label>
+          <label><input type="radio" name="gesamteindruck" value="4">4</label>
+          <label><input type="radio" name="gesamteindruck" value="5">5</label>
+        </div>
+        <div class="scale-legend"><span>schwach</span><span>sehr stark</span></div>
+
+        <div class="q">Ist klar, worum es geht?</div>
+        <div class="qhint">Ziel: die Hauptbotschaft des Epheserbriefs und die Lehre von Paulus verstehen.</div>
+        <div class="scale" data-scale="klarheit" data-required="1">
+          <label><input type="radio" name="klarheit" value="1">1</label>
+          <label><input type="radio" name="klarheit" value="2">2</label>
+          <label><input type="radio" name="klarheit" value="3">3</label>
+          <label><input type="radio" name="klarheit" value="4">4</label>
+          <label><input type="radio" name="klarheit" value="5">5</label>
+        </div>
+        <div class="scale-legend"><span>gar nicht klar</span><span>sehr klar</span></div>
+
+        <div class="q">Der Trichter-Aufbau hilft mir, den Brief einzuordnen.</div>
+        <div class="qhint">Bibel → Paulusbriefe → Epheser → Anwendung.</div>
+        <div class="scale" data-scale="trichter">
+          <label><input type="radio" name="trichter" value="1">1</label>
+          <label><input type="radio" name="trichter" value="2">2</label>
+          <label><input type="radio" name="trichter" value="3">3</label>
+          <label><input type="radio" name="trichter" value="4">4</label>
+          <label><input type="radio" name="trichter" value="5">5</label>
+        </div>
+        <div class="scale-legend"><span>stimme nicht zu</span><span>stimme voll zu</span></div>
+      </div>
+
+      <div class="card">
+        <h2>Für dich als Leiter</h2>
+        <p class="hint">Zum Präsentations-Leitfaden.</p>
+        <div class="q">Kannst du dir vorstellen, mit diesem Leitfaden eine Session zu leiten?</div>
+        <div class="opts" data-radio="leiter_session">
+          <label class="opt"><input type="radio" name="leiter_session" value="Ja, so wie er ist"> Ja, so wie er ist</label>
+          <label class="opt"><input type="radio" name="leiter_session" value="Ja, mit kleinen Anpassungen"> Ja, mit kleinen Anpassungen</label>
+          <label class="opt"><input type="radio" name="leiter_session" value="Nur mit größeren Änderungen"> Nur mit größeren Änderungen</label>
+          <label class="opt"><input type="radio" name="leiter_session" value="Nein"> Nein</label>
+        </div>
+
+        <div class="q">Die Hilfe-Kästen sind nützlich.</div>
+        <div class="qhint">Nugget, Anleitung, Antwortvorschlag, Ziel.</div>
+        <div class="scale" data-scale="hilfe_kaesten">
+          <label><input type="radio" name="hilfe_kaesten" value="1">1</label>
+          <label><input type="radio" name="hilfe_kaesten" value="2">2</label>
+          <label><input type="radio" name="hilfe_kaesten" value="3">3</label>
+          <label><input type="radio" name="hilfe_kaesten" value="4">4</label>
+          <label><input type="radio" name="hilfe_kaesten" value="5">5</label>
+        </div>
+        <div class="scale-legend"><span>nicht nützlich</span><span>sehr nützlich</span></div>
+
+        <div class="q">Wie viel Vorbereitung bräuchtest du, um damit zu leiten?</div>
+        <div class="opts" data-radio="vorbereitung">
+          <label class="opt"><input type="radio" name="vorbereitung" value="Kaum"> Kaum – ich könnte fast direkt loslegen</label>
+          <label class="opt"><input type="radio" name="vorbereitung" value="Etwas"> Etwas – einmal durchlesen reicht</label>
+          <label class="opt"><input type="radio" name="vorbereitung" value="Viel"> Viel – das wäre für mich aufwändig</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Für dich als Teilnehmer</h2>
+        <p class="hint">Zum Workbook und zur Präsentation.</p>
+        <div class="q">Nach so einer Präsentation könnte ich die Hauptbotschaft des Epheserbriefs in einem Satz wiedergeben.</div>
+        <div class="opts" data-radio="teilnehmer_kerngedanke">
+          <label class="opt"><input type="radio" name="teilnehmer_kerngedanke" value="Ja"> Ja</label>
+          <label class="opt"><input type="radio" name="teilnehmer_kerngedanke" value="Teilweise"> Teilweise</label>
+          <label class="opt"><input type="radio" name="teilnehmer_kerngedanke" value="Nein"> Nein</label>
+        </div>
+
+        <div class="q">Das Workbook macht Lust, aktiv mitzumachen.</div>
+        <div class="qhint">Schaubilder ausfüllen, Fragen beantworten.</div>
+        <div class="scale" data-scale="workbook_aktiv">
+          <label><input type="radio" name="workbook_aktiv" value="1">1</label>
+          <label><input type="radio" name="workbook_aktiv" value="2">2</label>
+          <label><input type="radio" name="workbook_aktiv" value="3">3</label>
+          <label><input type="radio" name="workbook_aktiv" value="4">4</label>
+          <label><input type="radio" name="workbook_aktiv" value="5">5</label>
+        </div>
+        <div class="scale-legend"><span>überhaupt nicht</span><span>auf jeden Fall</span></div>
+
+        <div class="q">Die Anwendung auf mein eigenes Leben war für mich …</div>
+        <div class="opts" data-radio="anwendung">
+          <label class="opt"><input type="radio" name="anwendung" value="Sehr greifbar"> Sehr greifbar</label>
+          <label class="opt"><input type="radio" name="anwendung" value="Etwas greifbar"> Etwas greifbar</label>
+          <label class="opt"><input type="radio" name="anwendung" value="Wenig greifbar"> Wenig greifbar</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Das Wichtigste</h2>
+        <div class="q">Beantwortet dieses Material ein echtes Bedürfnis für dich oder deine Gruppe? <span class="req">*</span></div>
+        <div class="scale" data-scale="beduerfnis" data-required="1">
+          <label><input type="radio" name="beduerfnis" value="1">1</label>
+          <label><input type="radio" name="beduerfnis" value="2">2</label>
+          <label><input type="radio" name="beduerfnis" value="3">3</label>
+          <label><input type="radio" name="beduerfnis" value="4">4</label>
+          <label><input type="radio" name="beduerfnis" value="5">5</label>
+        </div>
+        <div class="scale-legend"><span>gar nicht</span><span>voll und ganz</span></div>
+
+        <div class="q">Würdest du dieses Material einem anderen Leiter weiterempfehlen? <span class="req">*</span></div>
+        <div class="opts" data-radio="weiterempfehlung" data-required="1">
+          <label class="opt"><input type="radio" name="weiterempfehlung" value="Ja"> Ja</label>
+          <label class="opt"><input type="radio" name="weiterempfehlung" value="Vielleicht"> Vielleicht</label>
+          <label class="opt"><input type="radio" name="weiterempfehlung" value="Nein"> Nein</label>
+        </div>
+
+        <div class="q">Die Verbindung zu den 2minBibel-Videos ist klar und sinnvoll.</div>
+        <div class="scale" data-scale="video_verbindung">
+          <label><input type="radio" name="video_verbindung" value="1">1</label>
+          <label><input type="radio" name="video_verbindung" value="2">2</label>
+          <label><input type="radio" name="video_verbindung" value="3">3</label>
+          <label><input type="radio" name="video_verbindung" value="4">4</label>
+          <label><input type="radio" name="video_verbindung" value="5">5</label>
+          <label><input type="radio" name="video_verbindung" value="n/a">n/a</label>
+        </div>
+        <div class="scale-legend"><span>nicht klar</span><span>sehr sinnvoll · n/a = noch nicht gesehen</span></div>
+      </div>
+
+      <div class="card">
+        <h2>In deinen Worten</h2>
+        <div class="q">Wenn du <strong>eine einzige Sache</strong> verbessern könntest – welche?</div>
+        <textarea name="verbessern"></textarea>
+        <div class="q">Was sollten wir auf jeden Fall <strong>behalten</strong>?</div>
+        <textarea name="behalten"></textarea>
+      </div>
+
+      <!-- ==== GIFT / TESTER BLOCK ==== -->
+      <div class="card gift">
+        <h2>🎁 Würdest du es testen?</h2>
+        <p class="lead">Der wertvollste Schritt: das Material wirklich <strong>mit einer Gruppe ausprobieren</strong> – schon 2–3 Personen reichen.</p>
+        <p class="lead">Als Dankeschön schenken wir dir dafür unsere Buch-Box <strong>»Überrascht von Furcht &amp; Liebe«</strong> von Natha – <strong>gratis nach Hause</strong>. Nach deiner Session füllst du ein kurzes Praxis-Formular aus, und wir schicken dir die Box.</p>
+        <div class="q">Wärst du bereit, eine echte Session mit deiner Gruppe zu leiten und uns danach ein kurzes Feedback zu geben?</div>
+        <div class="opts" data-radio="testen">
+          <label class="opt"><input type="radio" name="testen" value="Ja, gerne"> Ja, gerne – schickt mir das Tester-Formular</label>
+          <label class="opt"><input type="radio" name="testen" value="Vielleicht"> Vielleicht</label>
+          <label class="opt"><input type="radio" name="testen" value="Nein"> Nein, dieses Mal nicht</label>
+        </div>
+        <div class="q">Deine E-Mail</div>
+        <div class="qhint">Nur dafür: wir schicken dir das Material und das kurze Tester-Formular. Sonst alles anonym.</div>
+        <input type="email" name="email" placeholder="name@beispiel.de" autocomplete="email">
+      </div>
+
+      <div class="card">
+        <div class="q">Noch etwas, das du loswerden möchtest?</div>
+        <div class="qhint">Optional.</div>
+        <textarea name="sonstiges"></textarea>
+      </div>
+
+      <button type="submit" class="btn" id="submitBtn">Feedback absenden</button>
+      <div class="err" id="err">Bitte fülle die mit * markierten Pflichtfelder aus.</div>
+      <p class="foot">Danke, dass du dir die Zeit nimmst. 🙏 — Das crosspaint-Team</p>
+    </form>
+  </div>
+
+  <!-- ==== THANKS ==== -->
+  <div id="thanksView" class="thanks">
+    <div style="font-size:44px">🙏</div>
+    <h2>Vielen Dank!</h2>
+    <p class="lead">Dein Feedback ist angekommen und hilft uns enorm.</p>
+    <p class="lead" id="thanksTester" style="display:none">Weil du dich als Tester gemeldet hast, bekommst du gleich eine E-Mail mit dem Material und dem kurzen Tester-Formular. Danach wartet deine <strong>gratis Buch-Box</strong> auf dich. 🎁</p>
+    <p class="foot">— Das crosspaint-Team</p>
+  </div>
+
+</div>
+
+<script>
+  // ==== CONFIG ====
+  // Trage hier die Web-App-URL deines Apps-Script-Projekts ein (…/exec).
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwv4mGbm_4CbQVzEk2I9XJ01nb_5J40JynO3s6On2lLivDSbJr3oXfEpXdGD2TsZoGQ3w/exec";
+  const FORM_LEVEL = "niveau1_epheser";
+
+  // visual state for radios / scales
+  document.querySelectorAll('input[type=radio]').forEach(r=>{
+    r.addEventListener('change',()=>{
+      const name=r.name;
+      document.querySelectorAll('input[name="'+name+'"]').forEach(x=>{
+        const box=x.closest('.opt')||x.closest('label');
+        if(box) box.classList.toggle('checked', x.checked);
+      });
+    });
+  });
+
+  const form=document.getElementById('fb');
+  const err=document.getElementById('err');
+  const btn=document.getElementById('submitBtn');
+
+  function getVal(name){const el=form.querySelector('input[name="'+name+'"]:checked');return el?el.value:"";}
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    // required checks
+    const required=['rolle','gesamteindruck','klarheit','beduerfnis','weiterempfehlung'];
+    for(const r of required){ if(!getVal(r)){ err.style.display='block'; window.scrollTo({top:0,behavior:'smooth'}); return; } }
+    err.style.display='none';
+
+    const data={
+      level:FORM_LEVEL,
+      timestamp:new Date().toISOString(),
+      rolle:getVal('rolle'),
+      gesamteindruck:getVal('gesamteindruck'),
+      klarheit:getVal('klarheit'),
+      trichter:getVal('trichter'),
+      leiter_session:getVal('leiter_session'),
+      hilfe_kaesten:getVal('hilfe_kaesten'),
+      vorbereitung:getVal('vorbereitung'),
+      teilnehmer_kerngedanke:getVal('teilnehmer_kerngedanke'),
+      workbook_aktiv:getVal('workbook_aktiv'),
+      anwendung:getVal('anwendung'),
+      beduerfnis:getVal('beduerfnis'),
+      weiterempfehlung:getVal('weiterempfehlung'),
+      video_verbindung:getVal('video_verbindung'),
+      verbessern:form.verbessern.value.trim(),
+      behalten:form.behalten.value.trim(),
+      testen:getVal('testen'),
+      email:form.email.value.trim(),
+      sonstiges:form.sonstiges.value.trim()
+    };
+
+    btn.disabled=true; btn.textContent='Wird gesendet …';
+    try{
+      await fetch(SCRIPT_URL,{
+        method:'POST',
+        mode:'no-cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify(data)
+      });
+    }catch(_){ /* no-cors: Antwort nicht lesbar, wir zeigen trotzdem Danke */ }
+
+    document.getElementById('formView').style.display='none';
+    const tv=document.getElementById('thanksView'); tv.style.display='block';
+    if(data.testen==='Ja, gerne'||data.testen==='Vielleicht'){
+      document.getElementById('thanksTester').style.display='block';
+    }
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+</script>
+</body>
+</html>

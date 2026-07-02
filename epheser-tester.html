@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epheser – Tester-Feedback</title>
+<style>
+  :root{
+    --orange:#F4600A;--orange-dark:#d8520a;--ink:#1b1b1b;--muted:#6b6b6b;
+    --line:#e7e3dd;--bg:#faf7f2;--card:#ffffff;--radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:640px;margin:0 auto;padding:28px 20px 80px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-size:40px;line-height:1.05;margin:.25em 0 .05em;letter-spacing:-.01em}
+  .sub{font-size:19px;font-weight:600;color:var(--orange);margin:0 0 14px}
+  .lead{font-size:16px;color:#333;margin:0 0 10px}
+  .meta{font-size:13px;color:var(--muted);margin:2px 0 22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin:16px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  .card h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin:0 0 4px}
+  .card .hint{font-size:13px;color:var(--muted);margin:0 0 14px}
+  .q{margin:18px 0 6px;font-weight:600;font-size:15.5px}
+  .q .req{color:var(--orange)}
+  .qhint{font-size:13px;color:var(--muted);margin:-2px 0 10px;font-weight:400}
+  .opts{display:flex;flex-direction:column;gap:8px;margin:8px 0 4px}
+  .opt{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:11px 13px;cursor:pointer;transition:.12s;background:#fff}
+  .opt:hover{border-color:#c9c2b8}
+  .opt input{accent-color:var(--orange);width:17px;height:17px;flex:0 0 auto}
+  .opt.checked{border-color:var(--orange);background:#fff7f1}
+  .scale{display:flex;gap:6px;margin:8px 0 2px;flex-wrap:wrap}
+  .scale label{flex:1;min-width:52px;text-align:center;border:1px solid var(--line);border-radius:10px;padding:12px 0;cursor:pointer;font-weight:600;background:#fff;transition:.12s}
+  .scale label:hover{border-color:#c9c2b8}
+  .scale input{position:absolute;opacity:0;pointer-events:none}
+  .scale label.checked{border-color:var(--orange);background:var(--orange);color:#fff}
+  .scale-legend{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+  textarea,input[type=email],input[type=text],input[type=number]{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;background:#fff;margin-top:6px}
+  textarea{min-height:74px;resize:vertical}
+  .row{display:flex;gap:10px}
+  .row .col{flex:1}
+  .gift{background:linear-gradient(180deg,#fff7f1,#ffffff);border:1.5px solid var(--orange)}
+  .gift h2{color:var(--orange-dark)}
+  .check{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:10px;padding:12px 13px;cursor:pointer;margin:8px 0;background:#fff}
+  .check input{accent-color:var(--orange);width:18px;height:18px;margin-top:2px;flex:0 0 auto}
+  .check.checked{border-color:var(--orange);background:#fff7f1}
+  .filebox{border:1.5px dashed #d8cfc2;border-radius:12px;padding:16px;text-align:center;background:#fffdfa;margin-top:8px}
+  .filebox input{display:none}
+  .filebtn{display:inline-block;background:#fff;border:1px solid var(--orange);color:var(--orange-dark);font-weight:600;padding:10px 16px;border-radius:10px;cursor:pointer}
+  #preview{max-width:100%;border-radius:10px;margin-top:12px;display:none}
+  .btn{display:block;width:100%;border:0;background:var(--orange);color:#fff;font-size:17px;font-weight:700;padding:16px;border-radius:12px;cursor:pointer;margin-top:22px;transition:.12s}
+  .btn:hover{background:var(--orange-dark)}
+  .btn:disabled{opacity:.6;cursor:default}
+  .foot{font-size:13px;color:var(--muted);text-align:center;margin-top:16px}
+  .thanks{display:none;text-align:center;padding:30px 10px}
+  .thanks h2{font-size:26px;color:var(--orange);margin:.2em 0}
+  .err{color:#b00;font-size:13px;margin-top:8px;display:none}
+  @media(max-width:480px){h1{font-size:32px}.scale label{min-width:44px;padding:10px 0}.row{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="formView">
+    <div class="kicker">crosspaint · 2minBibel</div>
+    <h1>EPHESER</h1>
+    <div class="sub">Tester-Feedback</div>
+    <p class="lead">Du hast eine echte Session mit deiner Gruppe geleitet – danke! Dein Bericht aus der Praxis ist für uns am wertvollsten. Bitte fülle dies <strong>direkt nach der Session</strong> aus.</p>
+    <p class="meta">⏱ ca. 6 Minuten · aus der Praxis</p>
+
+    <form id="fb">
+
+      <div class="card">
+        <h2>Der Rahmen</h2>
+        <div class="q">Mit welcher Gruppe hast du es durchgeführt? <span class="req">*</span></div>
+        <div class="opts" data-required="1">
+          <label class="opt"><input type="radio" name="gruppe" value="Hauskreis"> Hauskreis</label>
+          <label class="opt"><input type="radio" name="gruppe" value="Jugendgruppe"> Jugendgruppe</label>
+          <label class="opt"><input type="radio" name="gruppe" value="Bibelkreis"> Bibelkreis</label>
+          <label class="opt"><input type="radio" name="gruppe" value="Andere"> Andere</label>
+        </div>
+
+        <div class="q">Wie viele Teilnehmer waren dabei?</div>
+        <input type="number" name="teilnehmer_anzahl" min="1" placeholder="z. B. 3">
+
+        <div class="q">Was hast du benutzt?</div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="benutzt" value="Nur den Leitfaden"> Nur den Leitfaden</label>
+          <label class="opt"><input type="radio" name="benutzt" value="Nur das Workbook"> Nur das Workbook</label>
+          <label class="opt"><input type="radio" name="benutzt" value="Beides"> Beides</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Vorbereitung</h2>
+        <div class="q">Wie lange hast du gebraucht, um dich vorzubereiten?</div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="vorbereitung_dauer" value="< 30 Min"> Weniger als 30 Minuten</label>
+          <label class="opt"><input type="radio" name="vorbereitung_dauer" value="30-60 Min"> 30 – 60 Minuten</label>
+          <label class="opt"><input type="radio" name="vorbereitung_dauer" value="1-2 Std"> 1 – 2 Stunden</label>
+          <label class="opt"><input type="radio" name="vorbereitung_dauer" value="> 2 Std"> Mehr als 2 Stunden</label>
+        </div>
+
+        <div class="q">Der Leitfaden war leicht vorzubereiten.</div>
+        <div class="scale" data-scale="leicht_vorzubereiten">
+          <label><input type="radio" name="leicht_vorzubereiten" value="1">1</label>
+          <label><input type="radio" name="leicht_vorzubereiten" value="2">2</label>
+          <label><input type="radio" name="leicht_vorzubereiten" value="3">3</label>
+          <label><input type="radio" name="leicht_vorzubereiten" value="4">4</label>
+          <label><input type="radio" name="leicht_vorzubereiten" value="5">5</label>
+        </div>
+        <div class="scale-legend"><span>sehr aufwändig</span><span>sehr leicht</span></div>
+      </div>
+
+      <div class="card">
+        <h2>Während der Session</h2>
+        <div class="q">Was hat in der Gruppe <strong>am besten funktioniert</strong>? <span class="req">*</span></div>
+        <textarea name="best_funktioniert" data-required="1"></textarea>
+        <div class="q">Wo hat die Gruppe <strong>abgeschaltet oder gehakt</strong>? <span class="req">*</span></div>
+        <textarea name="gehakt" data-required="1"></textarea>
+
+        <div class="q">Die vorgeschlagene Dauer hat gepasst.</div>
+        <div class="qhint">Insgesamt ca. 50–60 Minuten.</div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="dauer" value="Zu kurz"> Zu kurz</label>
+          <label class="opt"><input type="radio" name="dauer" value="Genau richtig"> Genau richtig</label>
+          <label class="opt"><input type="radio" name="dauer" value="Zu lang"> Zu lang</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Was hängengeblieben ist</h2>
+        <div class="q">Konnten die Teilnehmer am Ende den Kerngedanken wiedergeben? <span class="req">*</span></div>
+        <div class="qhint">„Es war von Anfang an Gottes Plan, alle Gläubigen in Christus zu einer Einheit zu vereinen."</div>
+        <div class="opts" data-required="1">
+          <label class="opt"><input type="radio" name="kerngedanke_wiedergeben" value="Ja, die meisten"> Ja, die meisten</label>
+          <label class="opt"><input type="radio" name="kerngedanke_wiedergeben" value="Teilweise"> Teilweise</label>
+          <label class="opt"><input type="radio" name="kerngedanke_wiedergeben" value="Nein"> Nein</label>
+        </div>
+
+        <div class="q">Die Anwendung (Teil IV) hat zu echtem Austausch geführt.</div>
+        <div class="scale" data-scale="anwendung_austausch">
+          <label><input type="radio" name="anwendung_austausch" value="1">1</label>
+          <label><input type="radio" name="anwendung_austausch" value="2">2</label>
+          <label><input type="radio" name="anwendung_austausch" value="3">3</label>
+          <label><input type="radio" name="anwendung_austausch" value="4">4</label>
+          <label><input type="radio" name="anwendung_austausch" value="5">5</label>
+        </div>
+        <div class="scale-legend"><span>kaum</span><span>sehr</span></div>
+
+        <div class="q">Habt ihr das 2minBibel-Video geschaut?</div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="video" value="Ja - hilfreich"> Ja – und es war hilfreich</label>
+          <label class="opt"><input type="radio" name="video" value="Ja - eher nicht"> Ja – aber eher nicht hilfreich</label>
+          <label class="opt"><input type="radio" name="video" value="Nein"> Nein, nicht geschaut</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Deine Anpassungen</h2>
+        <div class="q">Was hast du <strong>weggelassen, ergänzt oder improvisiert</strong>?</div>
+        <textarea name="anpassungen"></textarea>
+        <div class="q">Was hat dir <strong>konkret gefehlt</strong>?</div>
+        <textarea name="gefehlt"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Dein Fazit</h2>
+        <div class="q">Gesamtnote für die Session-Erfahrung <span class="req">*</span></div>
+        <div class="scale" data-scale="gesamtnote" data-required="1">
+          <label><input type="radio" name="gesamtnote" value="1">1</label>
+          <label><input type="radio" name="gesamtnote" value="2">2</label>
+          <label><input type="radio" name="gesamtnote" value="3">3</label>
+          <label><input type="radio" name="gesamtnote" value="4">4</label>
+          <label><input type="radio" name="gesamtnote" value="5">5</label>
+        </div>
+        <div class="scale-legend"><span>schwach</span><span>hervorragend</span></div>
+
+        <div class="q">Würdest du es wieder benutzen und weiterempfehlen? <span class="req">*</span></div>
+        <div class="opts" data-required="1">
+          <label class="opt"><input type="radio" name="wieder_verwenden" value="Ja"> Ja</label>
+          <label class="opt"><input type="radio" name="wieder_verwenden" value="Vielleicht"> Vielleicht</label>
+          <label class="opt"><input type="radio" name="wieder_verwenden" value="Nein"> Nein</label>
+        </div>
+
+        <div class="q">Ein Zitat oder Moment aus der Session, der dir im Kopf geblieben ist:</div>
+        <textarea name="zitat"></textarea>
+      </div>
+
+      <!-- ==== PHOTO (optional) ==== -->
+      <div class="card">
+        <h2>📸 Ein Foto von eurer Gruppe? (optional)</h2>
+        <p class="hint">Wir freuen uns riesig über ein Bild aus eurer Session – es ist aber völlig freiwillig und keine Bedingung für dein Geschenk.</p>
+        <div class="filebox">
+          <label class="filbtn filebtn" for="foto">Foto auswählen</label>
+          <input type="file" id="foto" accept="image/*">
+          <div class="qhint" id="fotoName" style="margin-top:10px">Kein Foto ausgewählt.</div>
+          <img id="preview" alt="Vorschau">
+        </div>
+
+        <label class="check" id="chkSocial">
+          <input type="checkbox" name="consent_social">
+          <span>Ihr dürft dieses Foto auf Social Media und in eurer Kommunikation verwenden.</span>
+        </label>
+        <label class="check" id="chkBlur">
+          <input type="checkbox" name="consent_blur">
+          <span>Bitte macht die Gesichter vorher unkenntlich (verpixeln).</span>
+        </label>
+      </div>
+
+      <!-- ==== GIFT / ADDRESS ==== -->
+      <div class="card gift">
+        <h2>🎁 Wohin dürfen wir dein Geschenk schicken?</h2>
+        <p class="lead">Als Dankeschön fürs Testen schicken wir dir die Buch-Box <strong>»Überrascht von Furcht &amp; Liebe«</strong> – <strong>gratis</strong>. Sag uns nur, wohin.</p>
+        <div class="q">Vor- und Nachname <span class="req">*</span></div>
+        <input type="text" name="ship_name" autocomplete="name">
+        <div class="q">Straße und Hausnummer <span class="req">*</span></div>
+        <input type="text" name="ship_street" autocomplete="street-address">
+        <div class="row">
+          <div class="col">
+            <div class="q">PLZ <span class="req">*</span></div>
+            <input type="text" name="ship_zip" autocomplete="postal-code">
+          </div>
+          <div class="col">
+            <div class="q">Ort <span class="req">*</span></div>
+            <input type="text" name="ship_city" autocomplete="address-level2">
+          </div>
+        </div>
+        <div class="q">Land</div>
+        <input type="text" name="ship_country" value="Deutschland" autocomplete="country-name">
+        <div class="q">E-Mail für die Versandbestätigung <span class="req">*</span></div>
+        <input type="email" name="email" placeholder="name@beispiel.de" autocomplete="email">
+      </div>
+
+      <button type="submit" class="btn" id="submitBtn">Tester-Feedback absenden</button>
+      <div class="err" id="err">Bitte fülle die mit * markierten Pflichtfelder aus (inkl. Versandadresse fürs Geschenk).</div>
+      <p class="foot">Riesigen Dank für deinen Einsatz in der Praxis. 🙏 — Das crosspaint-Team</p>
+    </form>
+  </div>
+
+  <div id="thanksView" class="thanks">
+    <div style="font-size:44px">🎁</div>
+    <h2>Vielen Dank!</h2>
+    <p class="lead">Dein Praxis-Bericht ist angekommen. Genau solche Rückmeldungen entscheiden, wie es mit dem Epheser-Material weitergeht.</p>
+    <p class="lead">Deine Buch-Box <strong>»Überrascht von Furcht &amp; Liebe«</strong> machen wir startklar und schicken sie dir zu. Du bekommst eine Versandbestätigung per E-Mail.</p>
+    <p class="foot">— Das crosspaint-Team</p>
+  </div>
+
+</div>
+
+<script>
+  // ==== CONFIG ====
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwv4mGbm_4CbQVzEk2I9XJ01nb_5J40JynO3s6On2lLivDSbJr3oXfEpXdGD2TsZoGQ3w/exec";
+  const FORM_LEVEL = "niveau2_epheser";
+  const MAX_DIM = 1600;      // Foto wird clientseitig auf max. 1600px verkleinert
+  const JPEG_QUALITY = 0.85;
+
+  // Prefill E-Mail aus ?email= (identifiziert den Tester)
+  const urlEmail = new URLSearchParams(location.search).get('email');
+  if(urlEmail){ const f=document.querySelector('input[name="email"]'); if(f) f.value=urlEmail; }
+
+  // visuelle Zustände
+  document.querySelectorAll('input[type=radio]').forEach(r=>{
+    r.addEventListener('change',()=>{
+      document.querySelectorAll('input[name="'+r.name+'"]').forEach(x=>{
+        const box=x.closest('.opt')||x.closest('label'); if(box) box.classList.toggle('checked',x.checked);
+      });
+    });
+  });
+  document.querySelectorAll('.check input').forEach(c=>{
+    c.addEventListener('change',()=>c.closest('.check').classList.toggle('checked',c.checked));
+  });
+
+  // Foto-Handling mit Verkleinerung
+  let photoData=null, photoName="", photoMime="";
+  const fotoInput=document.getElementById('foto');
+  const preview=document.getElementById('preview');
+  const fotoName=document.getElementById('fotoName');
+  fotoInput.addEventListener('change',()=>{
+    const file=fotoInput.files[0]; if(!file) return;
+    photoName=file.name;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        let{width:w,height:h}=img;
+        if(w>MAX_DIM||h>MAX_DIM){ const s=Math.min(MAX_DIM/w,MAX_DIM/h); w=Math.round(w*s); h=Math.round(h*s); }
+        const c=document.createElement('canvas'); c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        photoData=c.toDataURL('image/jpeg',JPEG_QUALITY);
+        photoMime='image/jpeg';
+        preview.src=photoData; preview.style.display='block';
+        fotoName.textContent=photoName+' ✓';
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const form=document.getElementById('fb');
+  const err=document.getElementById('err');
+  const btn=document.getElementById('submitBtn');
+  function getVal(n){const el=form.querySelector('input[name="'+n+'"]:checked');return el?el.value:"";}
+  function txt(n){const el=form.querySelector('[name="'+n+'"]');return el?el.value.trim():"";}
+
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const reqRadio=['gruppe','kerngedanke_wiedergeben','gesamtnote','wieder_verwenden'];
+    const reqText=['best_funktioniert','gehakt','ship_name','ship_street','ship_zip','ship_city','email'];
+    for(const r of reqRadio){ if(!getVal(r)){return fail();} }
+    for(const t of reqText){ if(!txt(t)){return fail();} }
+    err.style.display='none';
+
+    const data={
+      level:FORM_LEVEL,
+      timestamp:new Date().toISOString(),
+      gruppe:getVal('gruppe'),
+      teilnehmer_anzahl:txt('teilnehmer_anzahl'),
+      benutzt:getVal('benutzt'),
+      vorbereitung_dauer:getVal('vorbereitung_dauer'),
+      leicht_vorzubereiten:getVal('leicht_vorzubereiten'),
+      best_funktioniert:txt('best_funktioniert'),
+      gehakt:txt('gehakt'),
+      dauer:getVal('dauer'),
+      kerngedanke_wiedergeben:getVal('kerngedanke_wiedergeben'),
+      anwendung_austausch:getVal('anwendung_austausch'),
+      video:getVal('video'),
+      anpassungen:txt('anpassungen'),
+      gefehlt:txt('gefehlt'),
+      gesamtnote:getVal('gesamtnote'),
+      wieder_verwenden:getVal('wieder_verwenden'),
+      zitat:txt('zitat'),
+      // Foto + Einwilligung
+      consent_social:form.querySelector('[name="consent_social"]').checked,
+      consent_blur:form.querySelector('[name="consent_blur"]').checked,
+      photo_base64:photoData||"",
+      photo_filename:photoName||"",
+      photo_mimetype:photoMime||"",
+      // Versand fürs Geschenk
+      ship_name:txt('ship_name'),
+      ship_street:txt('ship_street'),
+      ship_zip:txt('ship_zip'),
+      ship_city:txt('ship_city'),
+      ship_country:txt('ship_country')||"Deutschland",
+      email:txt('email')
+    };
+
+    btn.disabled=true; btn.textContent='Wird gesendet …';
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
+    }catch(_){}
+    document.getElementById('formView').style.display='none';
+    document.getElementById('thanksView').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  function fail(){ err.style.display='block'; window.scrollTo({top:0,behavior:'smooth'}); }
+</script>
+</body>
+</html>
